@@ -14,7 +14,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = True
 
 ALLOWED_HOSTS = ["*",".vercel.app"]
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000','https://*.127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://library-system-server-nine.vercel.app','http://127.0.0.1:8000','https://*.127.0.0.1']
 
 CORS_ALLOW_ALL_ORIGINS = True
 
