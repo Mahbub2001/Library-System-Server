@@ -6,16 +6,19 @@ class BookCategorySerializer(serializers.ModelSerializer):
         model = models.BookCategory
         fields = '__all__'
         
-
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Review
+        fields = ['id', 'user', 'book', 'review_text', 'rating', 'created_at']
 
 class BookSerializer(serializers.ModelSerializer):
     genre_name = serializers.CharField(source='genre.name', read_only=True)  
     genre = serializers.CharField(write_only=True) 
-
+    reviews = ReviewSerializer(many=True, read_only=True, source='review_set')
     class Meta:
         model = models.Book
         fields = '__all__'
-        extra_fields = ['genre_name']
+        extra_fields = ['genre_name','reviews']
 
     def create(self, validated_data):
         genre_name = validated_data.pop('genre')  
@@ -43,8 +46,3 @@ class WishlistSerializer(serializers.ModelSerializer):
         model = models.Wishlist
         fields = '__all__'
 
-
-class ReviewSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Review
-        fields = ['id', 'user', 'book', 'review_text', 'rating', 'created_at']
