@@ -8,9 +8,10 @@ class BookCategorySerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 class ReviewSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.username', read_only=True)
     class Meta:
         model = models.Review
-        fields = ['id', 'user', 'book', 'review_text', 'rating', 'created_at']
+        fields = ['id', 'user','user_name', 'book', 'review_text', 'rating', 'created_at']
 
 class BookSerializer(serializers.ModelSerializer):
     genre_name = serializers.CharField(source='genre.name', read_only=True)  
