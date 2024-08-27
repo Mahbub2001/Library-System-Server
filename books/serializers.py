@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from . import models
+from django.db.models import Avg
 
 class BookCategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -15,10 +16,15 @@ class BookSerializer(serializers.ModelSerializer):
     genre_name = serializers.CharField(source='genre.name', read_only=True)  
     genre = serializers.CharField(write_only=True) 
     reviews = ReviewSerializer(many=True, read_only=True, source='review_set')
+    average_rating = serializers.SerializerMethodField() 
     class Meta:
         model = models.Book
         fields = '__all__'
-        extra_fields = ['genre_name','reviews']
+        extra_fields = ['genre_name','reviews','average_rating']
+
+    def get_average_rating(self, obj):
+        avg_rating = obj.review_set.aggregate(Avg('rating'))['rating__avg']
+        return avg_rating if avg_rating is not None else 0  
 
     def create(self, validated_data):
         genre_name = validated_data.pop('genre')  
